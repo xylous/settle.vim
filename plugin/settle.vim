@@ -20,11 +20,24 @@ endfunction
 " Return the path that a Zettel can be found at, given a *parsed* entry of
 " settle's output (see above)
 function! SettleVimZettelPath(args)
-    let prefixDirectory="/"
+    let l:prefixDirectory="/"
     if a:args[0] == '[i]'
-        let prefixDirectory='/inbox/'
+        let l:prefixDirectory='/inbox/'
     endif
-    return SettleVimZettelkasten() . prefixDirectory . a:args[1] . '.md'
+    return SettleVimZettelkasten() . l:prefixDirectory . a:args[1] . '.md'
+endfunction
+
+function! SettleVimSettleNew(args)
+    let l:res=system("settle new " . a:args)
+    " If we have invalid output, i.e. with errors, print the error message and
+    " abort
+    if l:res[0] != '['
+        echom l:res
+        return 1
+    endif
+    let l:parsed=SettleVimParseZettelInformation(l:res)
+    let l:path=SettleVimZettelPath(l:parsed)
+    execute 'edit ' . l:path
 endfunction
 
 "let g:loaded_settle = 1
