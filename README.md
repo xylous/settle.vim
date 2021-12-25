@@ -1,26 +1,48 @@
 # settle.vim
 
-Vim frontend for [settle](https://github.com/xylous/settle)
+The (n)vim wrapper for [settle](https://github.com/xylous/settle)
 
-<!--
 ## Getting started
 
 ### Requirements
 
-(What other software does this project depend on?)
+- Vim or NeoVim. I've only used it with NVIM v0.6.0, but it should work with
+earlier versions as well.
 
 ### Installation
 
-(How can anyone get this software running, provided they meet the requirements?)
+#### Using Pathogen
+
+```
+cd ~/.vim
+mkdir bundle
+cd bundle
+git clone https://github.com/xylous/settle.vim.git
+```
+
+#### Using Vim-Plug
+
+Add the following line to your vimrc:
+
+```
+Plug 'xylous/settle.vim'
+```
+
+And then run `:PlugInstall`
+
+#### Using Vundle
+
+Add the following line to your vimrc:
+
+```
+Plugin 'xylous/settle.vim'
+```
+
+And then run `vim +PluginInstall +qall` in a shell.
 
 ### Usage
 
-(How is this software used?)
-
-## Roadmap
-
-(What ideas would I like to be implemented in the future?)
--->
+[Check the vim-help document](./doc/settle.vim.txt)
 
 ## Contributing
 
