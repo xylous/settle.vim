@@ -29,6 +29,10 @@ endfunction
 
 " Run `settle new` with the provided arguments and edit the file
 function! SettleVimSettleNew(args)
+    augroup SettleVimEditBuffer
+        autocmd!
+        autocmd BufLeave *.md call system("settle update '" . expand('%:p') . "'")
+    augroup END
     let l:res=system('settle new ' . a:args)
     " If we have invalid output, i.e. with errors, print the error message and
     " abort
