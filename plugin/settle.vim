@@ -1,6 +1,6 @@
-"if exists('g:loaded_settle')
-    "finish
-"endif
+if exists('g:loaded_settle')
+    finish
+endif
 
 " Return a string containing the absolute path to the Zettelkasten that settle
 " uses
@@ -56,4 +56,4 @@ function! SettleVimSettleEdit(pattern)
     endfor
 endfunction
 
-"let g:loaded_settle = 1
+let g:loaded_settle = 1
