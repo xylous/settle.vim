@@ -56,4 +56,8 @@ function! SettleVimSettleEdit(pattern)
     endfor
 endfunction
 
+" Export commands
+command! -nargs=* SettleNew call SettleVimSettleNew(<args>)
+command! -nargs=* SettleEdit call SettleVimSettleEdit(<args>)
+
 let g:loaded_settle = 1
