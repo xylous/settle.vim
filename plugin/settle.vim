@@ -27,8 +27,9 @@ function! SettleVimZettelPath(args)
     return SettleVimZettelkasten() . l:prefixDirectory . a:args[1] . '.md'
 endfunction
 
+" Run `settle new` with the provided arguments and edit the file
 function! SettleVimSettleNew(args)
-    let l:res=system("settle new " . a:args)
+    let l:res=system('settle new ' . a:args)
     " If we have invalid output, i.e. with errors, print the error message and
     " abort
     if l:res[0] != '['
@@ -38,6 +39,21 @@ function! SettleVimSettleNew(args)
     let l:parsed=SettleVimParseZettelInformation(l:res)
     let l:path=SettleVimZettelPath(l:parsed)
     execute 'edit ' . l:path
+endfunction
+
+" Edit files whose title matches `pattern`, as per `settle query` results, and
+" update their metadata automatically on buffer exit
+function! SettleVimSettleEdit(pattern)
+    augroup SettleVimEditBuffer
+        autocmd!
+        autocmd BufLeave *.md call system("settle update '" . expand('%:p') . "'")
+    augroup END
+    let l:results=split(system("settle query '" . a:pattern . "'"), "\n")
+    for res in l:results
+        let l:parsed=SettleVimParseZettelInformation(l:res)
+        let l:path=SettleVimZettelPath(l:parsed)
+        execute 'edit ' . l:path
+    endfor
 endfunction
 
 "let g:loaded_settle = 1
