@@ -1,0 +1,45 @@
+*settle.vim.txt* the (n)vim wrapper for `xylous/settle`
+
+================================================================================
+CONTENTS                                                     *SettleVimContents*
+
+    1. Usage .................................. |SettleVimusage|
+    2. License ................................ |SettleVimLicense|
+    3. Contributing ........................... |SettleVimContributing|
+    4. Credits ................................ |SettleVimCredits|
+
+================================================================================
+Section 1: Usage                                                *SettleVimUsage*
+
+settle.vim is a wrapper around `settle` (https://github.com/xylous/settle).
+
+settle.vim only exports two commands, `:SettleNew` and `:SettleEdit`.
+
+`:SettleNew` has the same arguments as `settle new` would have on the command
+line. Only, it opens the newly created entry in a buffer.
+
+`:SettleEdit` takes a `settle query`-compatible pattern and opens all files
+matching said pattern. After exiting a buffer, the Zettel's metadata is
+automatically updated in the database by an `autocmd BufLeave *.md` hook.
+
+================================================================================
+Section 2: License                                            *SettleVimLicense*
+
+This plugin is licensed under the MIT license. The full text of the license
+is available at:
+
+https://github.com/xylous/settle.vim/blob/master/LICENSE
+
+Or (raw text):
+
+https://raw.githubusercontent.com/xylous/settle.vim/master/LICENSE
+
+================================================================================
+Section 3: Contributing                                  *SettleVimContributing*
+
+If you want to contribute, open an Issue or a Pull Request on GitHub.
+
+================================================================================
+Section 4: Credits                                            *SettleVimCredits*
+
+This plugin was written by xylous <xylous.e@gmail.com>.
