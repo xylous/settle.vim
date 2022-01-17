@@ -5,7 +5,7 @@ endif
 " Return a string containing the absolute path to the Zettelkasten that settle
 " uses
 function! SettleVimZettelkasten()
-    return substitute(system('settle zettelkasten'), "\n$", "", "e")
+    return substitute(system('settle zk'), "\n$", "", "e")
 endfunction
 
 " Given a single entry of settle's output, return a list of two elements
