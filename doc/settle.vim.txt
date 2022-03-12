@@ -13,7 +13,8 @@ Section 1: Usage                                                *SettleVimUsage*
 
 settle.vim is a wrapper around `settle` (https://github.com/xylous/settle).
 
-settle.vim only exports two commands, `:SettleNew` and `:SettleEdit`.
+settle.vim only exports three commands, `:SettleNew`, `:SettleNewUnderLink`, and
+`:SettleEdit`.
 
 `:SettleNew` accepts two arguments: the first is the project (as per settle
 v0.36.0), the second is the title of the note. It creates a new file using
@@ -21,6 +22,10 @@ settle and then opens it for you to edit. Note that, since is a user-defined
 function, arguments are separated by commas.
 
 `:SettleEdit` opens FZF in the main Zettelkasten directory.
+
+`:SettleNewUnderLink` doesn't accept any argument: instead, it yanks the text in
+the (ASSUMED) wiki-style link under cursor and runs `:SettleNew`. The resulting
+note is placed in the main Zettelkasten directory.
 
 ================================================================================
 Section 2: License                                            *SettleVimLicense*
