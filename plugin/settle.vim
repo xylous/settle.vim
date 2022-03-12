@@ -53,8 +53,15 @@ function! SettleVimSettleEdit()
     execute 'FZF ' . SettleVimZettelkasten()
 endfunction
 
+" Read the wiki-style link under the cursor and make a new note with that title
+function SettleVimSettleNewLinkUnderCursor()
+    normal "ayi]
+    execute "SettleNew '','" . @a . "'"
+endfunction
+
 " Export commands
 command! -nargs=* SettleNew call SettleVimSettleNew(<args>)
-command! -nargs=0 SettleEdit call SettleVimSettleEdit(<args>)
+command! -nargs=0 SettleNewUnderLink call SettleVimSettleNewLinkUnderCursor()
+command! -nargs=0 SettleEdit call SettleVimSettleEdit()
 
 let g:loaded_settle = 1
