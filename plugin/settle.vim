@@ -19,11 +19,8 @@ endfunction
 " Return the path that a Zettel can be found at, given a *parsed* entry of
 " settle's output (see above)
 function! SettleVimZettelPath(args)
-    let l:prefixDirectory="/"
-    if a:args[0] == '[i]'
-        let l:prefixDirectory='/inbox/'
-    endif
-    return SettleVimZettelkasten() . l:prefixDirectory . a:args[1] . '.md'
+    let l:project = substitute(a:args[0], "[\]\[]", "", "ge")
+    return SettleVimZettelkasten() . '/' . l:project . '/' . a:args[1] . '.md'
 endfunction
 
 " Run `settle new` with the provided arguments and edit the file
