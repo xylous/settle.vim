@@ -25,7 +25,7 @@ function! SettleVimZettelPath(args)
 endfunction
 
 " Run `settle new` with the provided arguments and edit the file
-function! SettleVimSettleNew(project, title, ...)
+function! SettleVimSettleNew(project, title)
     augroup SettleVimEditBuffer
         autocmd!
         autocmd BufLeave *.md call system("settle update '" . expand('%:p') . "'")
@@ -51,7 +51,7 @@ function! SettleVimSettleEdit()
 endfunction
 
 " Export commands
-command! -nargs=* SettleNew call SettleVimSettleNew(<f-args>)
+command! -nargs=* SettleNew call SettleVimSettleNew(<args>)
 command! -nargs=0 SettleEdit call SettleVimSettleEdit(<args>)
 
 let g:loaded_settle = 1
