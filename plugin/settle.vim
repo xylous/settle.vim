@@ -8,9 +8,8 @@ function! SettleVimZettelkasten()
     return substitute(system('settle zk'), "\n$", "", "e")
 endfunction
 
-" Given a single entry of settle's output, return a list of two elements
-" containing the 'inbox marker' (`[i]` for inbox, `[p]` for permanent/not inbox)
-" and the title of the Zettel
+" Given a single entry of settle's output, return a list of two elements: the
+" project and the title
 function! SettleVimParseZettelInformation(args)
     let spl=split(a:args)
     let title=join(spl[1:-1])
@@ -45,23 +44,17 @@ function! SettleVimSettleNew(args)
     execute 'edit ' . l:path
 endfunction
 
-" Edit files whose title matches `pattern`, as per `settle query` results, and
-" update their metadata automatically on buffer exit
-function! SettleVimSettleEdit(pattern)
+" Open an instance of FZF on the main Zettelkasten directory
+function! SettleVimSettleEdit()
     augroup SettleVimEditBuffer
         autocmd!
         autocmd BufLeave *.md call system("settle update '" . expand('%:p') . "'")
     augroup END
-    let l:results=split(system("settle query '" . a:pattern . "'"), "\n")
-    for res in l:results
-        let l:parsed=SettleVimParseZettelInformation(l:res)
-        let l:path=SettleVimZettelPath(l:parsed)
-        execute 'edit ' . l:path
-    endfor
+    execute 'FZF ' . SettleVimZettelkasten()
 endfunction
 
 " Export commands
 command! -nargs=* SettleNew call SettleVimSettleNew(<args>)
-command! -nargs=* SettleEdit call SettleVimSettleEdit(<args>)
+command! -nargs=0 SettleEdit call SettleVimSettleEdit(<args>)
 
 let g:loaded_settle = 1
