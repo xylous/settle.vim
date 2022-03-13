@@ -54,14 +54,26 @@ function! SettleVimSettleEdit()
 endfunction
 
 " Read the wiki-style link under the cursor and make a new note with that title
-function SettleVimSettleNewLinkUnderCursor()
+function! SettleVimSettleNewLinkUnderCursor()
     normal "ayi]
     execute "SettleNew '','" . @a . "'"
+endfunction
+
+" When invoked, prompt the user for input and run SettleNew
+function! SettleVimInteractiveSettleNew()
+    let project = input("Project: ")
+    let title = input("Title: ")
+    if title != ''
+        execute 'SettleNew project,title'
+    else
+        echo 'no title specified; abort'
+    endif
 endfunction
 
 " Export commands
 command! -nargs=* SettleNew call SettleVimSettleNew(<args>)
 command! -nargs=0 SettleNewUnderLink call SettleVimSettleNewLinkUnderCursor()
+command! -nargs=0 SettleNewInteractive call SettleVimInteractiveSettleNew()
 command! -nargs=0 SettleEdit call SettleVimSettleEdit()
 
 let g:loaded_settle = 1
