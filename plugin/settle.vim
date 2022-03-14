@@ -56,7 +56,9 @@ endfunction
 " Read the wiki-style link under the cursor and make a new note with that title
 function! SettleVimSettleNewLinkUnderCursor()
     normal "ayi]
-    execute "SettleNew '','" . @a . "'"
+    " Strip newlines and tabs: replace with spaces
+    let l:title = substitute(getreg('a'), '[\n\t]', ' ', 'ge')
+    execute "SettleNew '','" . l:title . "'"
 endfunction
 
 " When invoked, prompt the user for input and run SettleNew
