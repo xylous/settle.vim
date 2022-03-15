@@ -19,12 +19,13 @@ endfunction
 " Return the path that a Zettel can be found at, given an entry of ewsettle's
 " output
 function! SettleVimZettelPath(args)
-    let l:parsed=SettleVimParseZettelInformation(a:args)
+    let l:parsed = SettleVimParseZettelInformation(a:args)
     let l:project = substitute(l:parsed[0], "[\]\[]", "", "ge")
     if l:project != ''
         let l:project=l:project . '/'
     endif
-    return SettleVimZettelkasten() . '/' . l:project . l:parsed[1] . '.md'
+    let l:title = substitute(l:parsed[1], '\"', '\\\"', "ge" )
+    return SettleVimZettelkasten() . '/' . l:project . l:title . '.md'
 endfunction
 
 " Run `settle new` with the provided arguments and edit the file
