@@ -32,9 +32,9 @@ endfunction
 function! SettleVimSettleNew(project, title)
     augroup SettleVimEditBuffer
         autocmd!
-        autocmd BufLeave *.md call system("settle update '" . expand('%:p') . "'")
+        autocmd BufLeave *.md call system("settle update \"" . expand('%:p') . "\"")
     augroup END
-    let l:res=system("settle new --project '" . a:project . "' '" . a:title . "'")
+    let l:res=system("settle new --project \"" . a:project . "\" \"" . a:title . "\"")
     " If we have invalid output, i.e. with errors, print the error message and
     " abort
     if l:res[0] != '['
@@ -49,7 +49,7 @@ endfunction
 function! SettleVimSettleEdit()
     augroup SettleVimEditBuffer
         autocmd!
-        autocmd BufLeave *.md call system("settle update '" . expand('%:p') . "'")
+        autocmd BufLeave *.md call system("settle update \"" . expand('%:p') . "\"")
     augroup END
     execute 'FZF ' . SettleVimZettelkasten()
 endfunction
