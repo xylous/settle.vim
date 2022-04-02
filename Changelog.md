@@ -1,6 +1,13 @@
 # Changelog
 
-## v0.3.2 - 2022-03-13
+## v0.3.4 - 2022-03-29
+
+- fix: strip newlines when creating Zettel from links
+- fix: escape double quotes when following paths
+- fix: use double quotes to pass arguments to `settle` so that single quotes
+    work
+
+## v0.3.3 - 2022-03-13
 
 - add a command to create Zettel interactively, by prompting the user for input
 
