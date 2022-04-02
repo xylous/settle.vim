@@ -16,7 +16,7 @@ function! SettleVimParseZettelInformation(args)
     return [spl[0], title]
 endfunction
 
-" Return the path that a Zettel can be found at, given an entry of ewsettle's
+" Return the path that a Zettel can be found at, given an entry of settle's
 " output
 function! SettleVimZettelPath(args)
     let l:parsed = SettleVimParseZettelInformation(a:args)
@@ -92,10 +92,23 @@ function! SettleVimSettleNewLinkUnderCursor()
     execute "SettleNew '','" . l:title . "'"
 endfunction
 
+" Follow the wikilink under cursor, if a note with the corresponding title
+" exists
+function! SettleVimFollowWikilink()
+    let l:title = SettleVimGrabWikilinkTitle()
+    let l:results = split(system("settle query \"" . l:title . "\""), "\n")
+    let l:to_edit = ''
+    for l:found in l:results
+        let l:to_edit .= SettleVimZettelPath(l:found)
+    endfor
+    execute ":edit " . l:to_edit
+endfunction
+
 " Export commands
 command! -nargs=* SettleNew call SettleVimSettleNew(<args>)
 command! -nargs=0 SettleNewUnderLink call SettleVimSettleNewLinkUnderCursor()
 command! -nargs=0 SettleNewInteractive call SettleVimInteractiveSettleNew()
 command! -nargs=0 SettleEdit call SettleVimSettleEdit()
+command! -nargs=0 SettleFollow call SettleVimFollowWikilink()
 
 let g:loaded_settle = 1
