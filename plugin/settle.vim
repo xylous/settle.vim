@@ -101,7 +101,11 @@ function! SettleVimFollowWikilink()
     for l:found in l:results
         let l:to_edit .= SettleVimZettelPath(l:found)
     endfor
-    execute ":edit " . l:to_edit
+    if len(l:to_edit) != 0
+        execute ":edit " . l:to_edit
+    else
+        echo 'settle.vim: no such note'
+    endif
 endfunction
 
 " Export commands
