@@ -54,14 +54,6 @@ function! SettleVimSettleEdit()
     execute 'FZF ' . SettleVimZettelkasten()
 endfunction
 
-" Read the wiki-style link under the cursor and make a new note with that title
-function! SettleVimSettleNewLinkUnderCursor()
-    normal "ayi]
-    " Strip newlines and tabs: replace with spaces
-    let l:title = substitute(getreg('a'), '[\n\t]', ' ', 'ge')
-    execute "SettleNew '','" . l:title . "'"
-endfunction
-
 " When invoked, prompt the user for input and run SettleNew
 function! SettleVimInteractiveSettleNew()
     let project = input("Project: ")
@@ -71,6 +63,29 @@ function! SettleVimInteractiveSettleNew()
     else
         echo 'no title specified; abort'
     endif
+endfunction
+
+" Define a wikilink text object as everything between `[[` and a matching `]]`
+" Beware that, even if the cursor isn't on the link, it will still select it
+" Also, if you're on a different line than the beginning `[[` of the wikilink
+" you want to select, it's not going to work properly.
+function! s:wikilink_textobj()
+    let l:link_regex='\[\[\zs\_.\{-}\ze\]\]'
+    if search(l:link_regex, 'ceW')
+        normal v
+        call search(l:link_regex, 'bcW')
+    endif
+endfunction
+
+xnoremap <silent> il :<C-u>call <sid>wikilink_textobj()<CR>
+onoremap il :<C-u>normal vil<CR>
+
+" Read the wiki-style link under the cursor and make a new note with that title
+function! SettleVimSettleNewLinkUnderCursor()
+    normal "ayi]
+    " Strip newlines and tabs: replace with spaces
+    let l:title = substitute(getreg('a'), '[\n\t]', ' ', 'ge')
+    execute "SettleNew '','" . l:title . "'"
 endfunction
 
 " Export commands
