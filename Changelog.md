@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.0 - 2022-04-02
+
+- add a command to follow the wikilink under cursor
+- add a function to get the proper title of a wikilink, without newlines or tabs
+- add a wikilink text object, mapped to `il`
+
 ## v0.3.4 - 2022-03-29
 
 - fix: strip newlines when creating Zettel from links
