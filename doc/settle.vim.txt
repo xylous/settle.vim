@@ -30,6 +30,13 @@ aborts. Otherwise, it runs `:SettleNew` with the specified parameters
 
     `:SettleEdit` opens FZF in the main Zettelkasten directory.
 
+    `:SettleFollow` follows the wikilink under the cursor, if it exists
+
+Additionally, a wikilink text object is defined. It only uses `il` (inside
+link), which selects everything between `[[` and a matching `]]`. Make sure that
+you're on the same line as the beginning `[[`, or else it won't select what you
+want.
+
 ================================================================================
 Section 2: License                                            *SettleVimLicense*
 
