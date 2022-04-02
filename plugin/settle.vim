@@ -80,11 +80,15 @@ endfunction
 xnoremap <silent> il :<C-u>call <sid>wikilink_textobj()<CR>
 onoremap il :<C-u>normal vil<CR>
 
-" Read the wiki-style link under the cursor and make a new note with that title
+" Return the wikilink under cursor, without newlines or tabs
+function! SettleVimGrabWikilinkTitle()
+    normal "ayil
+    return substitute(getreg('a'), '[\n\t]', ' ', 'ge')
+endfunction
+
+" Create the wikilink under cursor, if it doesn't exist already
 function! SettleVimSettleNewLinkUnderCursor()
-    normal "ayi]
-    " Strip newlines and tabs: replace with spaces
-    let l:title = substitute(getreg('a'), '[\n\t]', ' ', 'ge')
+    let l:title = SettleVimGrabWikilinkTitle()
     execute "SettleNew '','" . l:title . "'"
 endfunction
 
