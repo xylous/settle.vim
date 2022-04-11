@@ -56,7 +56,7 @@ endfunction
 
 " When invoked, prompt the user for input and run SettleNew
 function! SettleVimInteractiveSettleNew()
-    let project = input("Project: ")
+    let project = input("Project: ", '', 'custom,SettleVimAutocompleteProject')
     let title = input("Title: ")
     if title != ''
         execute 'SettleNew project,title'
