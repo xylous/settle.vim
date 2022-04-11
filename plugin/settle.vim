@@ -108,6 +108,12 @@ function! SettleVimFollowWikilink()
     endif
 endfunction
 
+" Return a list of projects in the Zettelkasten via `settle projects`.
+" Intended to be used in command completion
+function! SettleVimAutocompleteProject(A,L,P)
+    return system('settle projects')
+endfunction
+
 " Export commands
 command! -nargs=* SettleNew call SettleVimSettleNew(<args>)
 command! -nargs=0 SettleNewUnderLink call SettleVimSettleNewLinkUnderCursor()
