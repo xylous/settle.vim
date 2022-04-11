@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4.1 - 2022-04-11
+
+- when running SettleNewInteractive, provide TAB completion for projects by
+    using `settle projects` (requires settle v0.36.3)
+
 ## v0.4.0 - 2022-04-02
 
 - add a command to follow the wikilink under cursor
