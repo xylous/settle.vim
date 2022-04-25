@@ -89,7 +89,7 @@ endfunction
 " Create the wikilink under cursor, if it doesn't exist already
 function! SettleVimSettleNewLinkUnderCursor()
     let l:title = SettleVimGrabWikilinkTitle()
-    execute "SettleNew '','" . l:title . "'"
+    execute "SettleNew '',\"" . l:title . '"'
 endfunction
 
 " Follow the wikilink under cursor, if a note with the corresponding title
