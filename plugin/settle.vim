@@ -11,9 +11,10 @@ endfunction
 " Given a single entry of settle's output, return a list of two elements: the
 " project and the title
 function! SettleVimParseZettelInformation(args)
-    let spl=split(a:args)
-    let title=join(spl[1:-1])
-    return [spl[0], title]
+    let no_newline=substitute(a:args, '\n', '', 'ge')
+    let project=matchstr(l:no_newline, '\[\zs.*\ze\] .*')
+    let title=matchstr(l:no_newline, '\[.*\] \zs.*\ze')
+    return [project, title]
 endfunction
 
 " Return the path that a Zettel can be found at, given an entry of settle's
