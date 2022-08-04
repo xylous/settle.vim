@@ -33,9 +33,9 @@ endfunction
 function! SettleVimSettleNew(project, title)
     augroup SettleVimEditBuffer
         autocmd!
-        autocmd BufLeave *.md call system("settle update \"" . expand('%:p') . "\"")
+        autocmd BufLeave *.md call system('settle update "' . expand('%:p') . '"')
     augroup END
-    let l:res=system("settle new --project \"" . a:project . "\" \"" . a:title . "\"")
+    let l:res=system('settle new --project "' . a:project . '" "' . a:title . '"')
     " If we have invalid output, i.e. with errors, print the error message and
     " abort
     if l:res[0] != '['
@@ -50,15 +50,15 @@ endfunction
 function! SettleVimSettleEdit()
     augroup SettleVimEditBuffer
         autocmd!
-        autocmd BufLeave *.md call system("settle update \"" . expand('%:p') . "\"")
+        autocmd BufLeave *.md call system('settle update "' . expand('%:p') . '"')
     augroup END
     execute 'FZF ' . SettleVimZettelkasten()
 endfunction
 
 " When invoked, prompt the user for input and run SettleNew
 function! SettleVimInteractiveSettleNew()
-    let project = input("Project: ", '', 'custom,SettleVimAutocompleteProject')
-    let title = input("Title: ")
+    let project = input('Project: ', '', 'custom,SettleVimAutocompleteProject')
+    let title = input('Title: ')
     if title != ''
         execute 'SettleNew project,title'
     else
@@ -90,20 +90,20 @@ endfunction
 " Create the wikilink under cursor, if it doesn't exist already
 function! SettleVimSettleNewLinkUnderCursor()
     let l:title = SettleVimGrabWikilinkTitle()
-    execute "SettleNew '',\"" . l:title . '"'
+    execute 'SettleNew "","' . l:title . '"'
 endfunction
 
 " Follow the wikilink under cursor, if a note with the corresponding title
 " exists
 function! SettleVimFollowWikilink()
     let l:title = SettleVimGrabWikilinkTitle()
-    let l:results = split(system("settle query \"" . l:title . "\""), "\n")
+    let l:results = split(system('settle query "' . l:title . '"'), '\n')
     let l:to_edit = ''
     for l:found in l:results
         let l:to_edit .= SettleVimZettelPath(l:found)
     endfor
     if len(l:to_edit) != 0
-        execute ":edit " . l:to_edit
+        execute ':edit ' . l:to_edit
     else
         echo 'settle.vim: no such note'
     endif
