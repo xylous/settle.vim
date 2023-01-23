@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.2 - 2023-02-23
+
+- update system calls to conform with `settle v0.39.0`'s new command structure
+
 ## v0.4.1 - 2022-04-11
 
 - when running SettleNewInteractive, provide TAB completion for projects by

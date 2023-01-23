@@ -5,7 +5,7 @@ endif
 " Return a string containing the absolute path to the Zettelkasten that settle
 " uses
 function! SettleVimZettelkasten()
-    return substitute(system('settle zk'), "\n$", "", "e")
+    return substitute(system('settle ls path'), "\n$", "", "e")
 endfunction
 
 " Given a single entry of settle's output, return a list of two elements: the
@@ -33,9 +33,9 @@ endfunction
 function! SettleVimSettleNew(project, title)
     augroup SettleVimEditBuffer
         autocmd!
-        autocmd BufLeave *.md call system('settle update "' . expand('%:p') . '"')
+        autocmd BufLeave *.md call system('settle -Su "' . expand('%:p') . '"')
     augroup END
-    let l:res=system('settle new --project "' . a:project . '" "' . a:title . '"')
+    let l:res=system('settle -S --project "' . a:project . '" --create "' . a:title . '"')
     " If we have invalid output, i.e. with errors, print the error message and
     " abort
     if l:res[0] != '['
@@ -50,7 +50,7 @@ endfunction
 function! SettleVimSettleEdit()
     augroup SettleVimEditBuffer
         autocmd!
-        autocmd BufLeave *.md call system('settle update "' . expand('%:p') . '"')
+        autocmd BufLeave *.md call system('settle -Su "' . expand('%:p') . '"')
     augroup END
     execute 'FZF ' . SettleVimZettelkasten()
 endfunction
@@ -97,7 +97,7 @@ endfunction
 " exists
 function! SettleVimFollowWikilink()
     let l:title = SettleVimGrabWikilinkTitle()
-    let l:results = split(system('settle query "' . l:title . '"'), '\n')
+    let l:results = split(system('settle -Qt "' . l:title . '"'), '\n')
     let l:to_edit = ''
     for l:found in l:results
         let l:to_edit .= SettleVimZettelPath(l:found)
@@ -112,7 +112,7 @@ endfunction
 " Return a list of projects in the Zettelkasten via `settle projects`.
 " Intended to be used in command completion
 function! SettleVimAutocompleteProject(A,L,P)
-    return system('settle projects')
+    return system('settle ls projects')
 endfunction
 
 " Export commands
