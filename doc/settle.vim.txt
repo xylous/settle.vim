@@ -37,6 +37,9 @@ link), which selects everything between `[[` and a matching `]]`. Make sure that
 you're on the same line as the beginning `[[`, or else it won't select what you
 want.
 
+    `:SettleGraph` works only if you have xdot installed. Practically, it uses
+    that app to open/read a graph of the entire Zettelkasten.
+
 ================================================================================
 Section 2: License                                            *SettleVimLicense*
 
