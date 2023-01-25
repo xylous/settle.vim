@@ -6,8 +6,8 @@ The (n)vim wrapper for [settle](https://github.com/xylous/settle)
 
 ### Requirements
 
-- Vim or NeoVim. I've only used it with NVIM v0.6.0, but it should work with
-earlier versions as well.
+- Vim or NeoVim. I've only used it with NVIM v0.6.0 and afterwards, but it
+    should work with earlier versions as well without any problem.
 
 ### Installation
 
@@ -28,7 +28,7 @@ Add the following line to your vimrc:
 Plug 'xylous/settle.vim'
 ```
 
-And then run `:PlugInstall`
+Then source your vimrc and run `:PlugInstall`
 
 #### Using Vundle
 

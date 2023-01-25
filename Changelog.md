@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4.3 - 2023-02-25
+
+- add `:SettleGraph` command, for opening up a graph of the entire Zettelkasten
+    using xdot
+
 ## v0.4.2 - 2023-02-23
 
 - update system calls to conform with `settle v0.39.0`'s new command structure
