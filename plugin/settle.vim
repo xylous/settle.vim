@@ -115,11 +115,31 @@ function! SettleVimAutocompleteProject(A,L,P)
     return system('settle ls projects')
 endfunction
 
+" If xdot is found on the user's system, create a graph in settle's default
+" configuration directory ('zk.gv') and open it with xdot.
+function! SettleVimGraphView()
+    if len($XDG_CONFIG_HOME) != 0
+        let l:dir = $XDG_CONFIG_HOME . "/settle/"
+    else
+        let l:dir = $HOME . "/.config/settle/"
+    endif
+    let l:graph_file = "zk.gv"
+
+    if executable("xdot")
+        echo "settle.vim: loading graph with xdot..."
+        call system("settle query --graph >" . l:dir . l:graph_file)
+        call system("xdot " . l:dir . l:graph_file)
+    else
+        echo "settle.vim: couldn't find xdot to open the graph; abort"
+    endif
+endfunction
+
 " Export commands
 command! -nargs=* SettleNew call SettleVimSettleNew(<args>)
 command! -nargs=0 SettleNewUnderLink call SettleVimSettleNewLinkUnderCursor()
 command! -nargs=0 SettleNewInteractive call SettleVimInteractiveSettleNew()
 command! -nargs=0 SettleEdit call SettleVimSettleEdit()
 command! -nargs=0 SettleFollow call SettleVimFollowWikilink()
+command! -nargs=0 SettleGraph call SettleVimGraphView()
 
 let g:loaded_settle = 1
