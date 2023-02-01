@@ -97,7 +97,7 @@ endfunction
 " exists
 function! SettleVimFollowWikilink()
     let l:title = SettleVimGrabWikilinkTitle()
-    let l:results = split(system('settle -Qt "' . l:title . '"'), '\n')
+    let l:results = split(system('settle -Qe -t "' . l:title . '"'), '\n')
     let l:to_edit = ''
     for l:found in l:results
         let l:to_edit .= SettleVimZettelPath(l:found)
@@ -127,7 +127,7 @@ function! SettleVimGraphView()
 
     if executable("xdot")
         echo "settle.vim: loading graph with xdot..."
-        call system("settle query --graph >" . l:dir . l:graph_file)
+        call system("settle -Q --graph >" . l:dir . l:graph_file)
         call system("xdot " . l:dir . l:graph_file)
     else
         echo "settle.vim: couldn't find xdot to open the graph; abort"
