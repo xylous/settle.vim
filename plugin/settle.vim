@@ -97,10 +97,10 @@ endfunction
 " exists
 function! SettleVimFollowWikilink()
     let l:title = SettleVimGrabWikilinkTitle()
-    let l:results = split(system('settle -Qe -t "' . l:title . '"'), '\n')
+    let l:results = split(system('settle -Qe -f "%P" -t "' . l:title . '"'), '\n')
     let l:to_edit = ''
     for l:found in l:results
-        let l:to_edit .= SettleVimZettelPath(l:found)
+        let l:to_edit .= l:found
     endfor
     if len(l:to_edit) != 0
         execute ':edit ' . l:to_edit
