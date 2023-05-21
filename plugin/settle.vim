@@ -2,6 +2,12 @@ if exists('g:loaded_settle')
     finish
 endif
 
+" Update metadata upon finishing editing a note
+augroup settle_update_database
+    autocmd!
+    autocmd BufWritePost *.md call system('settle -Su "' . expand('%:p') . '"')
+augroup END
+
 " Return a string containing the absolute path to the Zettelkasten that settle
 " uses
 function! SettleVimZettelkasten()
@@ -31,10 +37,6 @@ endfunction
 
 " Run `settle new` with the provided arguments and edit the file
 function! SettleVimSettleNew(project, title)
-    augroup SettleVimEditBuffer
-        autocmd!
-        autocmd BufLeave *.md call system('settle -Su "' . expand('%:p') . '"')
-    augroup END
     let l:res=system('settle -S --project "' . a:project . '" --create "' . a:title . '"')
     " If we have invalid output, i.e. with errors, print the error message and
     " abort
@@ -48,10 +50,6 @@ endfunction
 
 " Open an instance of FZF on the main Zettelkasten directory
 function! SettleVimSettleEdit()
-    augroup SettleVimEditBuffer
-        autocmd!
-        autocmd BufLeave *.md call system('settle -Su "' . expand('%:p') . '"')
-    augroup END
     execute 'FZF ' . SettleVimZettelkasten()
 endfunction
 
@@ -130,7 +128,7 @@ function! SettleVimGraphView()
         call system("settle -Q --graph >" . l:dir . l:graph_file)
         call system("xdot " . l:dir . l:graph_file)
     else
-        echo "settle.vim: couldn't find xdot to open the graph; abort"
+        echo "settle.vim: couldn't find 'xdot' program; install it to visualise graph"
     endif
 endfunction
 
