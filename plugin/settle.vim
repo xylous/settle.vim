@@ -48,9 +48,12 @@ function! SettleVimSettleNew(project, title)
     execute 'edit ' . l:path
 endfunction
 
-" Open an instance of FZF on the main Zettelkasten directory
-function! SettleVimSettleEdit()
-    execute 'FZF ' . SettleVimZettelkasten()
+" Open an instance of FZF on the query results
+function! SettleVimSettleQuery(...)
+    let query = join(a:000)
+    let command = 'settle query --format "%P" ' . query
+    let flags = {'options': ['--enabled', '--delimiter', '/', '--with-nth', '-1'], 'source': command}
+    call fzf#run(fzf#vim#with_preview(fzf#wrap(flags)))
 endfunction
 
 " When invoked, prompt the user for input and run SettleNew
@@ -136,7 +139,7 @@ endfunction
 command! -nargs=* SettleNew call SettleVimSettleNew(<args>)
 command! -nargs=0 SettleNewUnderLink call SettleVimSettleNewLinkUnderCursor()
 command! -nargs=0 SettleNewInteractive call SettleVimInteractiveSettleNew()
-command! -nargs=0 SettleEdit call SettleVimSettleEdit()
+command! -nargs=* SettleQuery call SettleVimSettleQuery(<args>)
 command! -nargs=0 SettleFollow call SettleVimFollowWikilink()
 command! -nargs=0 SettleGraph call SettleVimGraphView()
 
