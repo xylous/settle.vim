@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.5.0 - 2023-05-26
+
+- add `al` ("around link") text object
+- add note title completion for markdown buffers, triggered by `<C-x><C-u>` in
+    insert mode
+- add `:SettleBacklink` for going to the note where `:SettleFollow` was executed
+    to get to the current one
+- add `:SettleQuery`, remove `:SettleEdit`
+    - `:SettleQuery` can use regular `settle query` syntax, and FZF will be
+        opened on the results
+- fix `:SettleFollow` on multi-line links by turning all newlines, tabs and
+    multiple whitespaces into a single space
+- refactor:
+    - (internal) rename functions, remove redundancies
+    - rename `:SettleNewInteractive` to `:SettleNewFromPrompt`
+    - rename `:SettleNewUnderLink` to `:SettleNewFromLink`
+
 ## v0.4.4 - 2023-02-01
 
 - fix: special characters (that would have been used by regex) are now allowed
