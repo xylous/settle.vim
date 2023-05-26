@@ -7,8 +7,37 @@ augroup settle_update_database
     autocmd!
     autocmd BufWritePost *.md call system('settle -Su "' . expand('%:p') . '"')
     " NOTE: completion is buffer local to largely prevent misuse
-    autocmd Filetype markdown setlocal completefunc=settle#complete_ins_note
+    autocmd FileType markdown setlocal completefunc=settle#complete_ins_note
 augroup END
+
+" Add `backlink` to the buffer-local variable `b:settle_stack`, which tracks all
+" backlinks of this note
+function! settle#link_stack_add(buffer, backlink)
+    let old = settle#link_stack_get(a:buffer)
+    if empty(old)
+        call setbufvar(a:buffer, 'settle_stack', [a:backlink])
+    else
+        let new = [a:backlink] + old
+        call setbufvar(a:buffer, 'settle_stack', new)
+    endif
+endfunction
+
+" Remove the first element of the buffer-local variable `b:settle_stack` and
+" return it
+function! settle#link_stack_pop(buffer)
+    let old = settle#link_stack_get(a:buffer)
+    call setbufvar(a:buffer, 'settle_stack', old[1:])
+    if empty(old)
+        return []
+    else
+        return old[0]
+    endif
+endfunction
+
+" Return the buffer-local variable `b:settle_stack`
+function! settle#link_stack_get(buffer)
+    return getbufvar(a:buffer, 'settle_stack')
+endfunction
 
 " Return a string containing the absolute path to the Zettelkasten that settle
 " uses
@@ -90,10 +119,22 @@ function! settle#follow_link()
     for l:found in l:results
         let l:to_edit .= l:found
     endfor
-    if len(l:to_edit) != 0
+    if ! empty(l:to_edit)
         execute ':edit ' . l:to_edit
+        call settle#link_stack_add(bufnr('%'), bufnr('#'))
     else
         echo 'settle.vim: no such note'
+    endif
+endfunction
+
+" Move to the note that invoked this one
+function! settle#follow_backlink()
+    let current_buffer_num = bufnr('%')
+    let backlink_num = settle#link_stack_pop(current_buffer_num)
+    if empty(backlink_num)
+        echomsg "settle.vim: no backlinks to move to"
+    else
+        execute ':b ' . backlink_num
     endif
 endfunction
 
@@ -156,8 +197,9 @@ command! -nargs=* SettleNew call settle#new(<args>)
 command! -nargs=0 SettleNewFromLink call settle#new_from_link()
 command! -nargs=0 SettleNewFromPrompt call settle#new_from_prompt()
 command! -nargs=* SettleQuery call settle#query(<args>)
-command! -nargs=0 SettleFollow call settle#follow_link()
 command! -nargs=0 SettleGraph call settle#graph()
+command! -nargs=0 SettleFollow call settle#follow_link()
+command! -nargs=0 SettleBacklink call settle#follow_backlink()
 
 """TEXT OBJECTS"""
 
