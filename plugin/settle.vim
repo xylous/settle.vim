@@ -79,13 +79,13 @@ function! s:wikilink_textobj()
     endif
 endfunction
 
-xnoremap <silent> il :<C-u>call <sid>wikilink_textobj()<CR>
-onoremap il :<C-u>normal vil<CR>
+xnoremap <silent> il :call <sid>wikilink_textobj()<CR>
+onoremap il :normal vil<CR>
 
 " Return the wikilink under cursor, without newlines or tabs
 function! SettleVimGrabWikilinkTitle()
     normal "ayil
-    return substitute(getreg('a'), '[\n\t]', ' ', 'ge')
+    return substitute(getreg('a'), '\(\n\|\s\)\+', ' ', 'ge')
 endfunction
 
 " Create the wikilink under cursor, if it doesn't exist already
