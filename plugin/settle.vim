@@ -6,6 +6,8 @@ endif
 augroup settle_update_database
     autocmd!
     autocmd BufWritePost *.md call system('settle -Su "' . expand('%:p') . '"')
+    " NOTE: completion is buffer local to largely prevent misuse
+    autocmd Filetype markdown setlocal completefunc=settle#complete_ins_note
 augroup END
 
 " Return a string containing the absolute path to the Zettelkasten that settle
