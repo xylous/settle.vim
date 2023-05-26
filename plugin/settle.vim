@@ -3,40 +3,96 @@ if exists('g:loaded_settle')
 endif
 
 " Update metadata upon finishing editing a note
-augroup settle_update_database
+" Set title autocompletion for markdown buffers only
+augroup settle_vim
     autocmd!
     autocmd BufWritePost *.md call system('settle -Su "' . expand('%:p') . '"')
-    " NOTE: completion is buffer local to largely prevent misuse
     autocmd FileType markdown setlocal completefunc=settle#complete_ins_note
 augroup END
 
-" Add `backlink` to the buffer-local variable `b:settle_stack`, which tracks all
-" backlinks of this note
-function! settle#link_stack_add(buffer, backlink)
-    let old = settle#link_stack_get(a:buffer)
-    if empty(old)
-        call setbufvar(a:buffer, 'settle_stack', [a:backlink])
+" Run `settle new` with the provided arguments and edit the file
+function! settle#new(project, title)
+    let l:res=system('settle -S --project "' . a:project . '" --create "' . a:title . '"')
+    " If we have invalid output, i.e. with errors, print the error message and
+    " abort
+    if l:res[0] != '['
+        echom l:res
+        return 1
+    endif
+    let l:path = settle#parse_zettel_path(l:res)
+    execute 'edit ' . l:path
+endfunction
+
+" Create the wikilink under cursor, if it doesn't exist already
+function! settle#new_from_link()
+    let l:title = settle#link_under_cursor()
+    execute 'settle#new "","' . l:title . '"'
+endfunction
+
+" When invoked, prompt the user for input and run SettleNew
+function! settle#new_from_prompt()
+    let project = input('Project: ', '', 'custom,settle#complete_cmd_project')
+    let title = input('Title: ')
+    if title != ''
+        execute 'SettleNew project,title'
     else
-        let new = [a:backlink] + old
-        call setbufvar(a:buffer, 'settle_stack', new)
+        echo 'no title specified; abort'
     endif
 endfunction
 
-" Remove the first element of the buffer-local variable `b:settle_stack` and
-" return it
-function! settle#link_stack_pop(buffer)
-    let old = settle#link_stack_get(a:buffer)
-    call setbufvar(a:buffer, 'settle_stack', old[1:])
-    if empty(old)
-        return []
+" Open an instance of FZF on the query results
+function! settle#query(...)
+    let query = join(a:000)
+    let command = 'settle query --format "%P" ' . query
+    let flags = {'options': ['--enabled', '--delimiter', '/', '--with-nth', '-1'], 'source': command}
+    call fzf#run(fzf#vim#with_preview(fzf#wrap(flags)))
+endfunction
+
+" If xdot is found on the user's system, create a graph in settle's default
+" configuration directory ('zk.gv') and open it with xdot.
+function! settle#graph()
+    if len($XDG_CONFIG_HOME) != 0
+        let l:dir = $XDG_CONFIG_HOME . "/settle/"
     else
-        return old[0]
+        let l:dir = $HOME . "/.config/settle/"
+    endif
+    let l:graph_file = "zk.gv"
+
+    if executable("xdot")
+        echo "settle.vim: loading graph with xdot..."
+        call system("settle -Q --graph >" . l:dir . l:graph_file)
+        call system("xdot " . l:dir . l:graph_file)
+    else
+        echo "settle.vim: couldn't find 'xdot' program; install it to visualise graph"
     endif
 endfunction
 
-" Return the buffer-local variable `b:settle_stack`
-function! settle#link_stack_get(buffer)
-    return getbufvar(a:buffer, 'settle_stack')
+" Follow the wikilink under cursor, if a note with the corresponding title
+" exists
+function! settle#follow_link()
+    let l:title = settle#link_under_cursor()
+    let l:results = split(system('settle -Qe -f "%P" -t "' . l:title . '"'), '\n')
+    let l:to_edit = ''
+    for l:found in l:results
+        let l:to_edit .= l:found
+    endfor
+    if ! empty(l:to_edit)
+        execute ':edit ' . l:to_edit
+        call settle#link_stack_add(bufnr('%'), bufnr('#'))
+    else
+        echo 'settle.vim: no such note'
+    endif
+endfunction
+
+" Move to the note that invoked this one
+function! settle#follow_backlink()
+    let current_buffer_num = bufnr('%')
+    let backlink_num = settle#link_stack_pop(current_buffer_num)
+    if empty(backlink_num)
+        echomsg "settle.vim: no backlinks to move to"
+    else
+        execute ':b ' . backlink_num
+    endif
 endfunction
 
 " Return a string containing the absolute path to the Zettelkasten that settle
@@ -66,76 +122,39 @@ function! settle#parse_zettel_path(args)
     return settle#zettelkasten_path() . '/' . l:project . l:title . '.md'
 endfunction
 
-" Run `settle new` with the provided arguments and edit the file
-function! settle#new(project, title)
-    let l:res=system('settle -S --project "' . a:project . '" --create "' . a:title . '"')
-    " If we have invalid output, i.e. with errors, print the error message and
-    " abort
-    if l:res[0] != '['
-        echom l:res
-        return 1
-    endif
-    let l:path = settle#parse_zettel_path(l:res)
-    execute 'edit ' . l:path
-endfunction
-
-" Open an instance of FZF on the query results
-function! settle#query(...)
-    let query = join(a:000)
-    let command = 'settle query --format "%P" ' . query
-    let flags = {'options': ['--enabled', '--delimiter', '/', '--with-nth', '-1'], 'source': command}
-    call fzf#run(fzf#vim#with_preview(fzf#wrap(flags)))
-endfunction
-
-" When invoked, prompt the user for input and run SettleNew
-function! settle#new_from_prompt()
-    let project = input('Project: ', '', 'custom,settle#complete_cmd_project')
-    let title = input('Title: ')
-    if title != ''
-        execute 'SettleNew project,title'
-    else
-        echo 'no title specified; abort'
-    endif
-endfunction
-
 " Return the wikilink under cursor, without newlines or tabs
 function! settle#link_under_cursor()
     normal "ayil
     return substitute(getreg('a'), '\(\n\|\s\)\+', ' ', 'ge')
 endfunction
 
-" Create the wikilink under cursor, if it doesn't exist already
-function! settle#new_from_link()
-    let l:title = settle#link_under_cursor()
-    execute 'settle#new "","' . l:title . '"'
-endfunction
-
-" Follow the wikilink under cursor, if a note with the corresponding title
-" exists
-function! settle#follow_link()
-    let l:title = settle#link_under_cursor()
-    let l:results = split(system('settle -Qe -f "%P" -t "' . l:title . '"'), '\n')
-    let l:to_edit = ''
-    for l:found in l:results
-        let l:to_edit .= l:found
-    endfor
-    if ! empty(l:to_edit)
-        execute ':edit ' . l:to_edit
-        call settle#link_stack_add(bufnr('%'), bufnr('#'))
+" Add `backlink` to the buffer-local variable `b:settle_stack`, which tracks all
+" backlinks of this note
+function! settle#link_stack_add(buffer, backlink)
+    let old = settle#link_stack_get(a:buffer)
+    if empty(old)
+        call setbufvar(a:buffer, 'settle_stack', [a:backlink])
     else
-        echo 'settle.vim: no such note'
+        let new = [a:backlink] + old
+        call setbufvar(a:buffer, 'settle_stack', new)
     endif
 endfunction
 
-" Move to the note that invoked this one
-function! settle#follow_backlink()
-    let current_buffer_num = bufnr('%')
-    let backlink_num = settle#link_stack_pop(current_buffer_num)
-    if empty(backlink_num)
-        echomsg "settle.vim: no backlinks to move to"
+" Remove the first element of the buffer-local variable `b:settle_stack` and
+" return it
+function! settle#link_stack_pop(buffer)
+    let old = settle#link_stack_get(a:buffer)
+    call setbufvar(a:buffer, 'settle_stack', old[1:])
+    if empty(old)
+        return []
     else
-        execute ':b ' . backlink_num
+        return old[0]
     endif
+endfunction
+
+" Return the buffer-local variable `b:settle_stack`
+function! settle#link_stack_get(buffer)
+    return getbufvar(a:buffer, 'settle_stack')
 endfunction
 
 " Return a list of projects in the Zettelkasten via `settle projects`.
@@ -169,25 +188,6 @@ function! settle#complete_ins_note(findstart, base)
             endif
         endfor
         return res
-    endif
-endfunction
-
-" If xdot is found on the user's system, create a graph in settle's default
-" configuration directory ('zk.gv') and open it with xdot.
-function! settle#graph()
-    if len($XDG_CONFIG_HOME) != 0
-        let l:dir = $XDG_CONFIG_HOME . "/settle/"
-    else
-        let l:dir = $HOME . "/.config/settle/"
-    endif
-    let l:graph_file = "zk.gv"
-
-    if executable("xdot")
-        echo "settle.vim: loading graph with xdot..."
-        call system("settle -Q --graph >" . l:dir . l:graph_file)
-        call system("xdot " . l:dir . l:graph_file)
-    else
-        echo "settle.vim: couldn't find 'xdot' program; install it to visualise graph"
     endif
 endfunction
 
