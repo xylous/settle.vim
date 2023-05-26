@@ -76,7 +76,7 @@ endfunction
 " Create the wikilink under cursor, if it doesn't exist already
 function! settle#new_from_link()
     let l:title = settle#link_under_cursor()
-    execute 'SettleNew "","' . l:title . '"'
+    execute 'settle#new "","' . l:title . '"'
 endfunction
 
 " Follow the wikilink under cursor, if a note with the corresponding title
@@ -148,7 +148,8 @@ function! settle#graph()
     endif
 endfunction
 
-" Export commands
+"""COMMANDS"""
+
 command! -nargs=* SettleNew call settle#new(<args>)
 command! -nargs=0 SettleNewFromLink call settle#new_from_link()
 command! -nargs=0 SettleNewFromPrompt call settle#new_from_prompt()
@@ -156,11 +157,13 @@ command! -nargs=* SettleQuery call settle#query(<args>)
 command! -nargs=0 SettleFollow call settle#follow_link()
 command! -nargs=0 SettleGraph call settle#graph()
 
-" Define a wikilink text object as everything between `[[` and a matching `]]`
-" Beware that, even if the cursor isn't on the link, it will still select it
-" Also, if you're on a different line than the beginning `[[` of the wikilink
-" you want to select, it's not going to work properly.
-function! s:wikilink_textobj()
+"""TEXT OBJECTS"""
+
+" NOTE: even if the cursor isn't on the link, it will still select it
+
+" match everything between `[[` and `]]` but not the square parentheses
+" themselves
+function! s:inside_wikilink()
     let l:link_regex='\[\[\zs\_.\{-}\ze\]\]'
     if search(l:link_regex, 'ceW')
         normal v
@@ -168,7 +171,19 @@ function! s:wikilink_textobj()
     endif
 endfunction
 
-xnoremap <silent> il :call <sid>wikilink_textobj()<CR>
+" match an entire link, both the square parentheses and what's inside them
+function! s:around_wikilink()
+    let l:link_regex='\zs\[\[\_.\{-}]\]\ze'
+    if search(l:link_regex, 'ceW')
+        normal v
+        call search(l:link_regex, 'bcW')
+    endif
+endfunction
+
+xnoremap <silent> il :call <sid>inside_wikilink()<CR>
 onoremap il :normal vil<CR>
+
+xnoremap <silent> al :call <sid>around_wikilink()<CR>
+onoremap al :normal val<CR>
 
 let g:loaded_settle = 1
