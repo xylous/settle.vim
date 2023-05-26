@@ -116,6 +116,34 @@ function! SettleVimAutocompleteProject(A,L,P)
     return system('settle ls projects')
 endfunction
 
+" Autocomplete in insert-mode with note titles
+function! SettleVimAutocompleteNote(findstart, base)
+    let notes = split(system('settle query --format "%t"'), '\n')
+    if a:findstart
+        " vim requires us to find the start of the base word for autocompletion
+        " words are delimited by spaces, tabs, and square parentheses, so we're
+        " going to go from cursor position backwards until we encounter one of
+        " those characters
+        let line = getline('.')
+        let start = col('.') - 1
+        while start > 0 && (line[start - 1] != ' ' && line[start - 1] != '\t'
+                    \ && line[start - 1] != '[')
+            let start -= 1
+        endwhile
+        return start
+    else
+        " store all valid matches into this variable
+        let res = []
+        " note that if the word base is empty, then everything is matched
+        for m in notes
+            if m =~ '^' . a:base
+                call add(res, m)
+            endif
+        endfor
+        return res
+    endif
+endfunction
+
 " If xdot is found on the user's system, create a graph in settle's default
 " configuration directory ('zk.gv') and open it with xdot.
 function! SettleVimGraphView()
@@ -142,5 +170,6 @@ command! -nargs=0 SettleNewInteractive call SettleVimInteractiveSettleNew()
 command! -nargs=* SettleQuery call SettleVimSettleQuery(<args>)
 command! -nargs=0 SettleFollow call SettleVimFollowWikilink()
 command! -nargs=0 SettleGraph call SettleVimGraphView()
+command! -nargs=0 SettleComplete call SettleVimGraphView()
 
 let g:loaded_settle = 1
