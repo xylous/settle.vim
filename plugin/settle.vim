@@ -44,7 +44,7 @@ endfunction
 function! settle#query(...)
     let query = join(a:000)
     let command = 'settle query --format "%P" ' . query
-    let flags = {'options': ['--enabled', '--delimiter', '/', '--with-nth', '-1'], 'source': command}
+    let flags = {'options': ['--multi', '--delimiter', '/', '--with-nth', '-1'], 'source': command}
     call fzf#run(fzf#vim#with_preview(fzf#wrap(flags)))
 endfunction
 
