@@ -12,7 +12,7 @@ augroup END
 
 " Run `settle new` with the provided arguments and edit the file
 function! settle#new(project, title)
-    let l:res=system('settle -S --project "' . a:project . '" --create "' . a:title . '"')
+    let l:res=system('settle -S --project "' . escape(a:project, '"') . '" --create "' . escape(a:title, '"') . '"')
     " If we have invalid output, i.e. with errors, print the error message and
     " abort
     if l:res[0] != '['
@@ -26,7 +26,7 @@ endfunction
 " Create the wikilink under cursor, if it doesn't exist already
 function! settle#new_from_link()
     let l:title = settle#link_under_cursor()
-    execute 'settle#new "","' . l:title . '"'
+    execute 'SettleNew "","' . l:title . '"'
 endfunction
 
 " When invoked, prompt the user for input and run SettleNew
@@ -74,7 +74,7 @@ function! settle#follow_link()
     let l:results = split(system('settle -Qe -f "%P" -t "' . l:title . '"'), '\n')
     let l:to_edit = ''
     for l:found in l:results
-        let l:to_edit .= l:found
+        let l:to_edit .= escape(l:found, '"')
     endfor
     if ! empty(l:to_edit)
         execute ':edit ' . l:to_edit
@@ -125,7 +125,7 @@ endfunction
 " Return the wikilink under cursor, without newlines or tabs
 function! settle#link_under_cursor()
     normal "ayil
-    return substitute(getreg('a'), '\(\n\|\s\)\+', ' ', 'ge')
+    return escape( substitute(getreg('a'), '\(\n\|\s\)\+', ' ', 'ge'), '"' )
 endfunction
 
 " Add `backlink` to the buffer-local variable `b:settle_stack`, which tracks all
