@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.5.1 - 2023-06-04
+
+- add tag autocompletion; note that all tags must be prefixed by `#` for
+    `<C-x><C-u>` autocompletion to trigger
+- add textobjects for tags (`it`, `at`)
+- add `:SettleFollowTag[!]` command
+- fix `:SettleQuery`: be able to select multiple notes with `<TAB>` inside fzf
+- fix: escacpe double quotes, so that note titles containing are properly
+    referenced
+- fix: textobjects no longer match the first occurence on a line
+
 ## v0.5.0 - 2023-05-26
 
 - add `al` ("around link") text object

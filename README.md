@@ -8,6 +8,9 @@ The (n)vim wrapper for [settle](https://github.com/xylous/settle)
 
 - Vim or NeoVim. I've only used it with NVIM v0.6.0 and afterwards, but it
     should work with earlier versions as well without any problem.
+- `fzf.vim`
+- `settle`
+- optional: `xdot`
 
 ### Installation
 
@@ -43,6 +46,9 @@ And then run `vim +PluginInstall +qall` in a shell.
 ### Usage
 
 [Check the vim-help document](./doc/settle.vim.txt)
+
+Ideally, you should make mappings for the commands that this plugin exports, as
+none are made by default.
 
 ## Contributing
 
