@@ -252,11 +252,11 @@ function! s:around_wikilink()
     endif
 endfunction
 
-xnoremap <silent> il :call <sid>inside_wikilink()<CR>
-onoremap il :normal vil<CR>
+xnoremap <silent> il :<C-u>call <sid>inside_wikilink()<CR>
+onoremap il :<C-u>normal vil<CR>
 
-xnoremap <silent> al :call <sid>around_wikilink()<CR>
-onoremap al :normal val<CR>
+xnoremap <silent> al :<C-u>call <sid>around_wikilink()<CR>
+onoremap al :<C-u>normal val<CR>
 
 " match the main part of a tag
 function! s:inside_tag()
@@ -276,10 +276,10 @@ function! s:around_tag()
     endif
 endfunction
 
-xnoremap <silent> it :call <sid>inside_tag()<CR>
-onoremap it :normal vit<CR>
+xnoremap <silent> it :<C-u>call <sid>inside_tag()<CR>
+onoremap it :<C-u>normal vit<CR>
 
-xnoremap <silent> at :call <sid>around_tag()<CR>
-onoremap at :normal vat<CR>
+xnoremap <silent> at :<C-u>call <sid>around_tag()<CR>
+onoremap at :<C-u>normal vat<CR>
 
 let g:loaded_settle = 1
