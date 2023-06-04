@@ -95,6 +95,16 @@ function! settle#follow_backlink()
     endif
 endfunction
 
+" Follow the tag under the cursor. If True is specified, then follow the subtags
+" as well.
+function! settle#follow_tag(...)
+    let l:tag = settle#tag_under_cursor(a:0 >= 1 ? a:1 : 0)
+    if ! empty(l:tag)
+        execute ':SettleQuery "--tag \"' . l:tag . '\""'
+    endif
+endfunction
+
+
 " Return a string containing the absolute path to the Zettelkasten that settle
 " uses
 function! settle#zettelkasten_path()
@@ -128,10 +138,10 @@ function! settle#link_under_cursor()
     return escape( substitute(getreg('a'), '\(\n\|\s\)\+', ' ', 'ge'), '"' )
 endfunction
 
-" Return the tag under cursor; if the given argument is True, then return the
-" subtag as well
-function settle#tag_under_cursor(subtag_included)
-    if a:subtag_included
+" Return the tag under cursor. If the first given argument is True, then return
+" the subtag as well
+function settle#tag_under_cursor(...)
+    if a:0 >= 1 ? a:1 : 0
         normal "ayat
     else
         normal "ayit
@@ -217,6 +227,7 @@ command! -nargs=* SettleQuery call settle#query(<args>)
 command! -nargs=0 SettleGraph call settle#graph()
 command! -nargs=0 SettleFollow call settle#follow_link()
 command! -nargs=0 SettleBacklink call settle#follow_backlink()
+command! -nargs=0 -bang SettleFollowTag call settle#follow_tag(<bang>0)
 
 """TEXT OBJECTS"""
 
