@@ -128,6 +128,17 @@ function! settle#link_under_cursor()
     return escape( substitute(getreg('a'), '\(\n\|\s\)\+', ' ', 'ge'), '"' )
 endfunction
 
+" Return the tag under cursor; if the given argument is True, then return the
+" subtag as well
+function settle#tag_under_cursor(subtag_included)
+    if a:subtag_included
+        normal "ayat
+    else
+        normal "ayit
+    endif
+    return getreg('a')
+endfunction
+
 " Add `backlink` to the buffer-local variable `b:settle_stack`, which tracks all
 " backlinks of this note
 function! settle#link_stack_add(buffer, backlink)
@@ -235,5 +246,29 @@ onoremap il :normal vil<CR>
 
 xnoremap <silent> al :call <sid>around_wikilink()<CR>
 onoremap al :normal val<CR>
+
+" match the main part of a tag
+function! s:inside_tag()
+    let l:tag_regex='#\zs\w\+\ze\(\/\|\s\|\n\)'
+    if search(l:tag_regex, 'ceW')
+        normal v
+        call search(l:tag_regex, 'bcW')
+    endif
+endfunction
+
+" match the an entire tag, including all its subtags
+function! s:around_tag()
+    let l:tag_regex='#\zs\(\w\|\/\)\+\ze\(\s\|\n\)'
+    if search(l:tag_regex, 'ceW')
+        normal v
+        call search(l:tag_regex, 'bcW')
+    endif
+endfunction
+
+xnoremap <silent> it :call <sid>inside_tag()<CR>
+onoremap it :normal vit<CR>
+
+xnoremap <silent> at :call <sid>around_tag()<CR>
+onoremap at :normal vat<CR>
 
 let g:loaded_settle = 1
