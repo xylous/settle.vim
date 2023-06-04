@@ -163,9 +163,10 @@ function! settle#complete_cmd_project(A,L,P)
     return system('settle ls projects')
 endfunction
 
-" Autocomplete in insert-mode with note titles
+" Autocomplete in insert-mode with note titles and tags
 function! settle#complete_ins_note(findstart, base)
-    let notes = split(system('settle query --format "%t"'), '\n')
+    let l:notes = split(system('settle query --format "%t"'), '\n')
+    let l:tags = map(split(system('settle ls tags'), '\n'), '"#" .. v:val')
     if a:findstart
         " vim requires us to find the start of the base word for autocompletion
         " words are delimited by spaces, tabs, and square parentheses, so we're
@@ -180,14 +181,19 @@ function! settle#complete_ins_note(findstart, base)
         return start
     else
         " store all valid matches into this variable
-        let res = []
+        let l:res = []
         " note that if the word base is empty, then everything is matched
-        for m in notes
+        for m in l:notes
             if m =~ '^' . a:base
-                call add(res, m)
+                call add(l:res, m)
             endif
         endfor
-        return res
+        for m in l:tags
+            if m =~ '^' . a:base
+                call add(l:res, m)
+            endif
+        endfor
+        return l:res
     endif
 endfunction
 
