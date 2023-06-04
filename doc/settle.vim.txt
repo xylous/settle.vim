@@ -13,7 +13,8 @@ Section 1: Usage                                                *SettleVimUsage*
 
 settle.vim is a wrapper around `settle` (https://github.com/xylous/settle).
 
-settle.vim exports the following commands:
+settle.vim exports the following commands, with which, for your own convenience,
+you may make normal mode mappings:
 
     `:SettleNew` accepts two arguments: the first is the project (as per settle
 v0.36.0), the second is the title of the zettel. It creates a new file using
@@ -40,6 +41,12 @@ aborts. Otherwise, it runs `:SettleNew` with the specified parameters
     you're inside note X and you run `:SettleFollow` to note Y; running
     `:SettleBacklink` inside note Y opens note X.
 
+    `:SettleFollowTag` opens fzf on the notes with the tag under cursor, if it
+    exists. Adding a bang, i.e. `:SettleFollowTag!`, makes the command match the
+    entire tag, including the subtags. For example, given a tag `#foo/bar/baz`,
+    the command without the bang matches only `#foo`, while with a bang it
+    matches `#foo/bar/baz`.
+
     `:SettleGraph` works only if you have xdot installed. It uses that app to
     open/read a graph of the entire Zettelkasten.
 
@@ -47,9 +54,10 @@ Additionally, the plugin defines two text objects: `il` ("inside link") and `al`
 ("around link"). Both match everything between `[[` and the first matching `]]`,
 but the latter also matches the double square parentheses, unlike the former.
 
-Also, the plugin provides completion for note titles, but only in markdown
-buffers. Completion is triggered by typing a word and then pressing
-`<CTRL-x><CTRL-u>` in insert mode.
+Also, the plugin provides completion for note titles and tags, but only in
+markdown buffers. Completion is triggered by typing a word and then pressing
+`<CTRL-x><CTRL-u>` in insert mode. Note that, for tags, said word needs to be
+prefixed by a hashtag (`#`).
 
 ================================================================================
 Section 2: License                                            *SettleVimLicense*
