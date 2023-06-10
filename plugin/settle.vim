@@ -12,7 +12,7 @@ augroup END
 
 " Run `settle new` with the provided arguments and edit the file
 function! settle#new(project, title)
-    let l:res=system('settle -S --project "' . escape(a:project, '"') . '" --create "' . escape(a:title, '"') . '"')
+    let l:res=system('settle sync --project "' . escape(a:project, '"') . '" --create "' . escape(a:title, '"') . '" 2>/dev/null')
     " If we have invalid output, i.e. with errors, print the error message and
     " abort
     if l:res[0] != '['
