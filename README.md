@@ -1,6 +1,20 @@
 # settle.vim
 
-The (n)vim wrapper for [settle](https://github.com/xylous/settle)
+The (n)vim wrapper for [settle](https://github.com/xylous/settle).
+
+Features:
+
+- title and tag autocompletion, triggered by `<C-x><C-u>`
+- automatic updating of Zettel which you edit with vim
+- following links under cursor and even backlinks
+- Zettel creation, be it in command mode, be it interactively, or be it from the
+    wikilink under cursor
+- opening FZF on the search results of `settle query`
+- finding notes with the tag under cursor
+- opening a graph of the entire Zettelkasten with `xdot`
+- four handy textobjects: `il` for "inside wikilink", `al` for "around
+    wikilink", `it` for "inside tag" (root tag without subtags) and `at` for
+    "around tag" (entire tag, with all subtags)
 
 ## Getting started
 
@@ -8,9 +22,9 @@ The (n)vim wrapper for [settle](https://github.com/xylous/settle)
 
 - Vim or NeoVim. I've only used it with NVIM v0.6.0 and afterwards, but it
     should work with earlier versions as well without any problem.
-- `fzf.vim`
+- `fzf.vim` (plus `fzf`)
 - `settle`
-- optional: `xdot`
+- optional: `xdot`, if you're going to use graphs
 
 ### Installation
 
