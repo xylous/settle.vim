@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.5.2 - 2023-06-27
+
+- add `:SettleQueryNoteForwardlinks`, `:SettleQueryNoteBacklinks`, which open
+    the links and backlinks of the current note, respectively
+- add `:SettleQueryGhosts`, which finds all ghosts and creates the selections as
+    notes in the main Zettelkasten project
+- fix: allow hyphens (`-`) and underlines (`_`) in tag textobjects
+- fix: suppress warnings by `settle` in `:SettleNew`, when titles containing
+    multiple consecutive spaces are used (cf. settle v0.39.9)
+
 ## v0.5.1 - 2023-06-04
 
 - add tag autocompletion; note that all tags must be prefixed by `#` for
