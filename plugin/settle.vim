@@ -228,6 +228,10 @@ command! -nargs=0 SettleGraph call settle#graph()
 command! -nargs=0 SettleFollow call settle#follow_link()
 command! -nargs=0 SettleBacklink call settle#follow_backlink()
 command! -nargs=0 -bang SettleFollowTag call settle#follow_tag(<bang>0)
+" handy commands if you want to stay in-editor for as long as possible
+command! -nargs=0 SettleQueryNoteForwardlinks call settle#query('--links "' . expand("%:t:r") . '"')
+command! -nargs=0 SettleQueryNoteBacklinks call settle#query('--backlinks "' . expand("%:t:r") . '"')
+command! -nargs=0 SettleQueryLoners call settle#query('--loners')
 
 """TEXT OBJECTS"""
 
