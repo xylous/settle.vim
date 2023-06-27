@@ -1,0 +1,133 @@
+settle-vim.txt      settle-vim v0.5.2
+SETTLE-VIM - TABLE OF CONTENTS                         *settle-vim* *settle-vim-toc*
+================================================================================
+
+    Usage .................................. |settle-vim-usage|
+        Commands ........................... |settle-vim-commands|
+        Autocompletion ..................... |settle-vim-autocompletion|
+        Textobjects ........................ |settle-vim-textobj|
+    License ................................ |settle-vim-license|
+    Contributing ........................... |settle-vim-contributing|
+    Credits ................................ |settle-vim-credits|
+
+USAGE                                                           *settle-vim-usage*
+================================================================================
+
+settle.vim is a wrapper around `settle` (https://github.com/xylous/settle).
+Generally, it is a good idea to get familiar with that program to be able to
+use this plugin effectively.
+
+COMMANDS                                                     *settle-vim-commands*
+================================================================================
+
+Several commands are exported, although no mappings are made. It's recommended
+that you make your own mappings for the various functionality added by this
+plugin. That being said, here are the commands:
+
+NOTE: Arguments whose placeholders are between `<` and `>` are mandatory.
+      Arguments whose placeholders are between `[` and `]` are optional.
+      Commands not followed by any placeholders do not take any arguments.
+
+    `:SettleNew <PROJECT>,<TITLE>` creates a new Zettel in the specified
+    project and opens it in a new buffer.
+
+    `:SettleNewFromLink` takes the Zettel referenced by the wiki-style link it
+    finds under cursor and creates it, if it doesn't exist, inside the main
+    Zettelkasten project.
+
+    `:SettleNewFromPrompt` creates a new Zettel by interactively prompting you
+    for project in which it's going to be put and the title it will have.
+    NOTE: if the title is empty, then the operation is aborted.
+
+    `:SettleQuery [QUERY]` opens FZF on the results of `settle query [QUERY]`,
+    so you can browse the results. It uses the same syntax as the command it
+    wraps around, so not giving it any argument would return the entire
+    Zettelkasten.
+
+    `:SettleQueryGhosts` queries all notes in the Zettelkasten that have been
+    referenced (via wiki-links), but do not actually exist. Every/any
+    selection is created in the main Zettelkasten project.
+
+    `:SettleQueryNoteForwardlinks` queries the notes that the currently opened
+    one points to.
+
+    `:SettleQueryNoteBacklinks` queries the notes that have links pointing to
+    the currently opened one.
+
+    `:SettleGraph` requires `xdot.py` (https://github.com/jrfonseca/xdot.py),
+     which it uses to open a graph of the entire Zettelkasten.
+
+    `:SettleFollow` takes the wiki-link under the cursor and opens the link it
+    references, if it exists.
+
+    `:SettleBacklink` only works in buffers that have been opened via
+    `:SettleFollow`. It opens the file where you followed the link to the
+    current one.
+
+    `:SettleFollowTag` grabs the basename of the tag under cursor (e.g. in a
+    tag like `#medicine/neurology`, it only grabs #`medicine`) and queries the
+    Zettel that have it.
+
+    `:SettleFollowTag!` grabs the entire tag under cursor, including its
+    subtags (unlike the non-bang version of the command) and queries the
+    Zettel that have it.
+
+AUTOCOMPLETION                                         *settle-vim-autocompletion*
+================================================================================
+
+When writing, it's quite useful to not have to type exact things like Zettel
+titles and tags all the time, even more so the longer they get.
+
+By writing a word (or even a few letters!) and pressing `<CTRL-X><CTRL-u>` in
+insert mode, you can trigger autocompletion for all Zettel titles that start
+with that word (or letters).
+
+Say you have a Zettel called `"How to read more books"`; in a markdown buffer,
+if you enter insert mode and type `h<C-x><C-u>`, it will autocomplete the
+title for you (or prompt you to select among multiple notes, if more begin
+with the letter `H` or `h`).
+
+You can also autocomplete tags, by the same principle. But keep in mind that
+the sequence of letters that you want to autocomplete must be prefixed by a
+hashtag (`#`). Enter insert mode, type `#` plus the few initial letters and
+then pressing `<C-x><C-u>`, and voilà.
+
+TEXTOBJECTS                                                   *settle-vim-textobj*
+================================================================================
+
+Four text objects are defined by this plugin:
+
+    `il` - "inside link", matches everything between `[[` and the first
+    matching `]]` but not the square brackets themselves.
+
+    `al` - "around link", matches everything between `[[` and the first
+    matching `]]` including the square brackets.
+
+    `it` - "inside tag", matches the first word in a tag (after `#`) but not
+    the hashtag itelf, e.g. on a tag like `#psychology/disorders`, only
+    `psychology` is matched.
+
+    `at` - "around tag", matches the entire tag and its subtags, but not the
+    hashtag itself, e.g. on a tag like `#biology/anatomy` it would match
+    `biology/anatomy`.
+
+LICENSE                                                       *settle-vim-license*
+================================================================================
+
+This plugin is licensed under the MIT license. The full text of the license
+is available at:
+
+    1. https://github.com/xylous/settle.vim/blob/master/LICENSE
+    2. https://raw.githubusercontent.com/xylous/settle.vim/master/LICENSE
+
+CONTRIBUTING                                             *settle-vim-contributing*
+================================================================================
+
+If you want to contribute, open an Issue or a Pull Request on GitHub.
+
+For that, see https://github.com/xylous/settle.vim
+
+CREDITS                                                       *settle-vim-credits*
+================================================================================
+
+This plugin was written by xylous <xylous.e@gmail.com>.
