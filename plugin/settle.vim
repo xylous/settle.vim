@@ -48,6 +48,15 @@ function! settle#query(...)
     call fzf#run(fzf#vim#with_preview(fzf#wrap(flags)))
 endfunction
 
+" Open fzf on all notes that don't exist (the 'ghosts', as they're called) and
+" create every single selection
+function! settle#query_ghosts()
+    let l:zk_path = settle#zettelkasten_path()
+    let l:ghosts = split(system("settle ls ghosts"), "\n")
+    let l:flags = {'options': ['--multi', '--delimiter', '/', '--with-nth', '-1'], 'source': l:ghosts, 'sink': function("settle#new", [""])}
+    call fzf#run(fzf#wrap(l:flags))
+endfunction
+
 " If xdot is found on the user's system, create a graph in settle's default
 " configuration directory ('zk.gv') and open it with xdot.
 function! settle#graph()
@@ -231,7 +240,7 @@ command! -nargs=0 -bang SettleFollowTag call settle#follow_tag(<bang>0)
 " handy commands if you want to stay in-editor for as long as possible
 command! -nargs=0 SettleQueryNoteForwardlinks call settle#query('--links "' . expand("%:t:r") . '"')
 command! -nargs=0 SettleQueryNoteBacklinks call settle#query('--backlinks "' . expand("%:t:r") . '"')
-command! -nargs=0 SettleQueryLoners call settle#query('--loners')
+command! -nargs=0 SettleQueryGhosts call settle#query_ghosts()
 
 """TEXT OBJECTS"""
 
