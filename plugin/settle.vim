@@ -8,14 +8,7 @@ augroup settle_vim
     autocmd!
     autocmd BufWritePost *.md call system('settle -Su "' . expand('%:p') . '"')
     autocmd FileType markdown setlocal completefunc=settle#complete_ins_note
-    autocmd FileType markdown match settleWikilink "\[\[\zs.\{-}\ze\]\]"
 augroup END
-
-if ! exists("g:settle_wikilink_hl_guifg")
-    let g:settle_wikilink_hl_guifg = "#e647e0"
-endif
-
-execute "highlight settleWikilink guifg=" . g:settle_wikilink_hl_guifg
 
 " Run `settle new` with the provided arguments and edit the file
 function! settle#new(project, title)
