@@ -6,6 +6,7 @@ SETTLE-VIM - TABLE OF CONTENTS                         *settle-vim* *settle-vim-
         Commands ........................... |settle-vim-commands|
         Autocompletion ..................... |settle-vim-autocompletion|
         Textobjects ........................ |settle-vim-textobj|
+        Syntax highlighting ................ |settle-vim-hl|
     License ................................ |settle-vim-license|
     Contributing ........................... |settle-vim-contributing|
     Credits ................................ |settle-vim-credits|
@@ -55,7 +56,7 @@ NOTE: Arguments whose placeholders are between `<` and `>` are mandatory.
     the currently opened one.
 
     `:SettleGraph` requires `xdot.py` (https://github.com/jrfonseca/xdot.py),
-     which it uses to open a graph of the entire Zettelkasten.
+    which it uses to open a graph of the entire Zettelkasten.
 
     `:SettleFollow` takes the wiki-link under the cursor and opens the link it
     references, if it exists.
@@ -104,12 +105,27 @@ Four text objects are defined by this plugin:
     matching `]]` including the square brackets.
 
     `it` - "inside tag", matches the first word in a tag (after `#`) but not
-    the hashtag itelf, e.g. on a tag like `#psychology/disorders`, only
+    the hashtag itself, e.g. on a tag like `#psychology/disorders`, only
     `psychology` is matched.
 
     `at` - "around tag", matches the entire tag and its subtags, but not the
     hashtag itself, e.g. on a tag like `#biology/anatomy` it would match
     `biology/anatomy`.
+
+SYNTAX HIGHLIGHTING                                                *settle-vim-hl*
+================================================================================
+
+Additionally, the plugin exports functionality to allow highlighting wiki-style
+links. By default, it is disabled, and therefore opt-in. The following options
+control it:
+
+    `settle_wikilink_hl_enable` - set to `1` if you want to enable link highlighting
+
+    `settle_wikilink_hl_guifg` - colour of the foreground of the links;
+    default: `#e647e0`, a light purple hue
+
+NOTE: other plugins that define syntax highlighting for Markdown files may
+override the wikilink highlighting.
 
 LICENSE                                                       *settle-vim-license*
 ================================================================================
