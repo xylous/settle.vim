@@ -196,7 +196,16 @@ endfunction
 " Autocomplete in insert-mode with note titles and tags
 function! settle#complete_ins_note(findstart, base)
     let l:notes = split(system('settle query --format "%t"'), '\n')
-    let l:tags = map(split(system('settle ls tags'), '\n'), '"#" .. v:val')
+    let l:raw_tags = split(system('settle ls tags'), '\n')
+    let l:tags = []
+    for tag in l:raw_tags
+        let basetag = split(tag, "/")[0]
+        if basetag != tag
+            call add(l:tags, '#' . basetag)
+        endif
+        call add(l:tags, '#' . tag)
+    endfor
+
     if a:findstart
         " vim requires us to find the start of the base word for autocompletion
         " words are delimited by spaces, tabs, and square parentheses, so we're
