@@ -273,7 +273,7 @@ onoremap al :<C-u>normal val<CR>
 
 " match the main part of a tag
 function! s:inside_tag()
-    let l:tag_regex='#\zs\(\w\|-\|_\)\+\ze\(\/\|\s\|\n\)'
+    let l:tag_regex='#\zs\(\w\|-\|_\)\+\ze\(\/\|\s\|\n\|(\|)\)'
     if search(l:tag_regex, 'ceW')
         normal v
         call search(l:tag_regex, 'bcW')
@@ -282,7 +282,7 @@ endfunction
 
 " match the an entire tag, including all its subtags
 function! s:around_tag()
-    let l:tag_regex='#\zs\(\w\|\/\|-\|_\)\+\ze\(\s\|\n\)'
+    let l:tag_regex='#\zs\(\w\|\/\|-\|_\)\+\ze\(\s\|\n\|(\|)\)'
     if search(l:tag_regex, 'ceW')
         normal v
         call search(l:tag_regex, 'bcW')
