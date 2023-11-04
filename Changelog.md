@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.3 - 2023-11-04
+
+- add opt-in syntax highlighting
+- fix: allow tags to be finished by a round parenthesis (`(` or `)`)
+- fix: always add the basename of a tag to the completion list
+
 ## v0.5.2 - 2023-06-27
 
 - add `:SettleQueryNoteForwardlinks`, `:SettleQueryNoteBacklinks`, which open
