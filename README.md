@@ -59,7 +59,7 @@ And then run `vim +PluginInstall +qall` in a shell.
 
 ### Usage
 
-[Check the vim-help document](./doc/settle.vim.txt)
+[Check the vim-help document](./doc/settle-vim.txt)
 
 Ideally, you should make mappings for the commands that this plugin exports, as
 none are made by default.
